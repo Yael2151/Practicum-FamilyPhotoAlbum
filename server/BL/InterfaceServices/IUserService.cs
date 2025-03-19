@@ -14,5 +14,6 @@ namespace BL.InterfaceServices
         public void AddUser(User user);
         public void UpdateUser(int id, User user);
         public void RemoveUser(int id);
+        public void Login(string email, string password);
     }
 }

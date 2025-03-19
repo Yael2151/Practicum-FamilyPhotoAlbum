@@ -1,9 +1,13 @@
 ﻿using BL.InterfaceServices;
 using DL;
 using DL.Entities;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +15,44 @@ namespace BL.Services
 {
     public class UserService : IUserService
     {
+
+        private readonly IConfiguration _configuration;
         private readonly IDataContext _dataContext;
-        public UserService(IDataContext dataContext)
+
+        public UserService(IDataContext dataContext, IConfiguration configuration)
         {
             _dataContext = dataContext;
+            _configuration = configuration;
         }
+
+        //public string GenerateJwtToken(string username, string[] roles)
+        //{
+        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        //    var claims = new List<Claim>
+        //{
+        //    new Claim(ClaimTypes.Name, username)
+        //};
+
+        //    // הוספת תפקידים כ-Claims
+        //    foreach (var role in roles)
+        //    {
+        //        claims.Add(new Claim(ClaimTypes.Role, role));
+        //    }
+
+        //    var token = new JwtSecurityToken(
+        //        issuer: _configuration["Jwt:Issuer"],
+        //        audience: _configuration["Jwt:Audience"],
+        //        claims: claims,
+        //        expires: DateTime.Now.AddMinutes(30),
+        //        signingCredentials: credentials
+        //    );
+
+        //    return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
+
+
         public List<User> GetAllUsers()
         {
             return _dataContext.Users.ToList();
@@ -61,6 +98,15 @@ namespace BL.Services
                 _dataContext.SaveChanges();
             }
 
+        }
+
+        public void Login(string email, string password)
+        {
+            User user = _dataContext.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+            if (user == null)
+            {
+                throw new UnauthorizedAccessException("Invalid email or password");
+            }
         }
     }
 }

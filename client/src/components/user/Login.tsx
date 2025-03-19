@@ -24,7 +24,7 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
         e.preventDefault();
         handleClose();
         try {
-            const res = await axios.post('http://localhost:8787/api/user/login', {
+            const res = await axios.post('https://localhost:7263/api/User/login', {
                 email: email,
                 password: password
             });

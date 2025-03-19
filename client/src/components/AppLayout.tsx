@@ -3,6 +3,7 @@ import Login from "./user/Login";
 import Registration from "./user/Registration";
 import Update from "./user/Update";
 import Detailes from "./user/UserDetailes";
+import FileUploader from "./files/FileUploader";
 // import { SvgIcon, SvgIconProps } from "@mui/material";
 
 const AppLayout = () => {
@@ -29,7 +30,8 @@ const AppLayout = () => {
                 </>
               )
           }
-        </>
+          <FileUploader/>
+        </> 
     );
 };
 

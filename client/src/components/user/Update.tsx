@@ -8,11 +8,12 @@ import HandlingErrors from "../HandlingErrors";
 const Update = () => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
+        // firstName: '',
+        // lastName: '',
+        name: '',
         email: '',
-        address: '',
-        phone: ''
+        // address: '',
+        // phone: ''
     });
 
     const handleOpen = () => setOpen(true);
@@ -35,7 +36,7 @@ const Update = () => {
         e.preventDefault();
         handleClose();
         try {
-            const res = await axios.put('http://localhost:8787/api/user', formData, {
+            const res = await axios.put('https://localhost:7263/api/User', formData, {
                 headers: {
                     'user-id': state.id,
                     'Content-Type': 'application/json'
@@ -48,11 +49,12 @@ const Update = () => {
                 });
                 alert('Update successful!');
                 setFormData({
-                    firstName: '',
-                    lastName: '',
+                    // firstName: '',
+                    // lastName: '',
+                    name: '',
                     email: '',
-                    address: '',
-                    phone: ''
+                    // address: '',
+                    // phone: ''
                 });
             }
         } catch (e) {

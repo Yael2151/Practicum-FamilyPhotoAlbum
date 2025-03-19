@@ -2,12 +2,13 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import { FormEvent } from "react";
 interface FormProps {
     formData: {
-        firstName: string;
-        lastName: string;
+        // firstName: string;
+        // lastName: string;
+        name: string;
         email: string;
         password?: string;
-        address: string;
-        phone: string;
+        // address: string;
+        // phone: string;
     };
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     handleSubmit: (e: FormEvent) => void;
@@ -21,7 +22,7 @@ const Form = ({ formData, handleChange, handleSubmit, buttonText, isPasswordRequ
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     {buttonText}
                 </Typography>
-                <TextField
+                {/* <TextField
                     name="firstName"
                     label="First Name"
                     type="text"
@@ -29,12 +30,21 @@ const Form = ({ formData, handleChange, handleSubmit, buttonText, isPasswordRequ
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
-                />
-                <TextField
+                /> */}
+                {/* <TextField
                     name="lastName"
                     label="Last Name"
                     type="text"
                     value={formData.lastName}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                /> */}
+                <TextField
+                    name="name"
+                    label="Name"
+                    type="text"
+                    value={formData.name}
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
@@ -59,7 +69,7 @@ const Form = ({ formData, handleChange, handleSubmit, buttonText, isPasswordRequ
                         margin="normal"
                     />
                 )}
-                <TextField
+                {/* <TextField
                     name="address"
                     label="Address"
                     type="text"
@@ -76,7 +86,7 @@ const Form = ({ formData, handleChange, handleSubmit, buttonText, isPasswordRequ
                     onChange={handleChange}
                     fullWidth
                     margin="normal"
-                />
+                /> */}
                 <Button type="submit" variant="contained">
                     {buttonText}
                 </Button>

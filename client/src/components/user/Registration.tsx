@@ -8,12 +8,13 @@ import HandlingErrors from "../HandlingErrors";
 const Registration = () => {
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
+        // firstName: '',
+        // lastName: '',
+        name: '',
         email: '',
         password: '',
-        address: '',
-        phone: ''
+        // address: '',
+        // phone: ''
     });
 
     const handleOpen = () => setOpen(true);
@@ -32,32 +33,65 @@ const Registration = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
+    // const handleSubmit = async (e: FormEvent) => {
+    //     e.preventDefault();
+    //     handleClose();
+    //     try {
+    //         const res = await axios.post('https://localhost:7263/api/User', formData);
+    //         if (res.data.message) {
+    //             dispatch({
+    //                 type: 'Add_USER',
+    //                 data: res.data.user
+    //             });
+    //             alert('Registration successful!');
+    //             setFormData({
+    //                 // firstName: '',
+    //                 // lastName: '',
+    //                 email: '',
+    //                 password: ''
+    //                 // address: '',
+    //                 // phone: '',
+    //             });
+    //         }
+    //     } catch (e) {
+    //         setError(error);
+    //         setOpenErrors(true);
+    //     }
+    // };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         handleClose();
+    
+        console.log("📤 Sending request to API with data:", formData);
+    
         try {
-            const res = await axios.post('http://localhost:8787/api/user/register', formData);
+            const res = await axios.post('https://localhost:7263/api/User', formData);
+            console.log("✅ Response received:", res.data);
+    
             if (res.data.message) {
-                dispatch({
-                    type: 'Add_USER',
-                    data: res.data.user
-                });
+                dispatch({ type: 'Add_USER', data: res.data.user });
                 alert('Registration successful!');
-                setFormData({
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    address: '',
-                    phone: '',
-                    password: '',
-                });
+                setFormData({ name: '', email: '', password: '' });
             }
-        } catch (e) {
+        } catch (error : any) {
+            console.error("❌ Error received:", error);
+    
+            if (error.response) {
+                console.error("📥 Server Response Data:", error.response.data);
+                console.error("📥 Server Response Status:", error.response.status);
+    
+                if (error.response.data.errors) {
+                    console.error("🚨 Validation Errors:", error.response.data.errors);
+                    alert("Validation Errors: " + JSON.stringify(error.response.data.errors, null, 2));
+                }
+            }
+    
             setError(error);
             setOpenErrors(true);
         }
     };
-
+    
     return (
         <>
             <Stack direction="row" spacing={2} sx={{ position: 'absolute', top: 0, left: 100, padding: '16px' }}>
@@ -76,5 +110,4 @@ const Registration = () => {
         </>
     );
 };
-
 export default Registration;

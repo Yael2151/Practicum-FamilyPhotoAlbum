@@ -1,12 +1,13 @@
 ﻿using BL.InterfaceServices;
 using DL.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController
+    public class UserController : ControllerBase
     {
         private readonly IUserService userService;
         public UserController(IUserService userService)
@@ -14,31 +15,60 @@ namespace WebAPI.Controllers
             this.userService = userService;
         }
 
-        [HttpGet("{id}")]
-        public User GetBUserById(int id)
-        {
-            return userService.GetUserById(id);
-        }
         [HttpGet]
-        public List<User> Get()
+        //[Authorize(Policy = "AdminOnly")]
+        public List<User> GetAllUsers()
         {
             return userService.GetAllUsers();
         }
+
+        [HttpGet("{id}")]
+        //[Authorize(Policy = "AdminOnly")]
+        public User GetUserById(int id)
+        {
+            return userService.GetUserById(id);
+        }
+
         [HttpPost]
         public void AddUser([FromBody] User user)
         {
             userService.AddUser(user);
         }
+
+        //[HttpPost]
+        //public void AddUser([FromBody] User user)
+        //{
+        //    user.CreatedBy = user.CreatedBy ?? "System"; // ערך ברירת מחדל
+        //    user.UpdatedBy = user.UpdatedBy ?? "System";
+        //    userService.AddUser(user);
+        //}
+
         [HttpPut("{id}")]
+        //[Authorize]
         public void UpDateUser(int id, [FromBody] User user)
         {
             userService.UpdateUser(id, user);
         }
+
         [HttpDelete("{id}")]
+        //[Authorize(Policy = "AdminOnly")]
         public void RemoveUser(int id)
         {
             userService.RemoveUser(id);
         }
 
+        [HttpPost("login")]
+        public IActionResult LoginUser([FromBody] DL.Entities.Login login)
+        {
+            try
+            {
+                userService.Login(login.Email, login.Password);
+                return Ok("Login successful");
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Unauthorized("Invalid email or password");
+            }
+        }
     }
 }

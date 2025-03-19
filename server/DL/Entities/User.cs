@@ -13,9 +13,9 @@ namespace DL.Entities
         public string Email { get; set; }
         public string Password { get; set; }
         public DateTime CreatedAt { get; } = DateTime.Now;
-        public string CreatedBy { get; set; }
+        public string CreatedBy { get; set; } = "system";
         public DateTime UpdatedAt { get; set; }
-        public string UpdatedBy { get; set; }
+        public string UpdatedBy { get; set; } = "system";
         
 
         public User() { }
