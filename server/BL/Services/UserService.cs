@@ -1,6 +1,7 @@
 ﻿using BL.InterfaceServices;
 using DL;
 using DL.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -52,32 +53,31 @@ namespace BL.Services
         //    return new JwtSecurityTokenHandler().WriteToken(token);
         //}
 
-
-        public List<User> GetAllUsers()
+        public async Task<List<User>> GetAllUsersAsync()
         {
-            return _dataContext.Users.ToList();
+            return await _dataContext.Users.ToListAsync();
         }
-        public User GetUserById(int id)
+        public async Task<User> GetUserByIdAsync(int id)
         {
             //BabyValidation.ValidateBabyId(id);
-            return _dataContext.Users.Where(u => u.Id == id).FirstOrDefault();
+            return await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
-        public void AddUser(User user)
+        public async Task AddUserAsync(User user)
         {
             //BabyValidation.ValidateBabyId(baby.Id);
             //BabyValidation.ValidateBabyName(baby.Name);
             {
                 _dataContext.Users.Add(user);
-                _dataContext.SaveChanges();
+                await _dataContext.SaveChangesAsync();
             }
 
         }
-        public void UpdateUser(int id, User user)
+        public async Task UpdateUserAsync(int id, User user)
         {
             //BabyValidation.ValidateBabyId(baby.Id);
             //BabyValidation.ValidateBabyId(id);
             //BabyValidation.ValidateBabyName(baby.Name);
-            var newUser = _dataContext.Users.Where(user => user.Id == id).FirstOrDefault();
+            var newUser = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (newUser != null)
             {
                 newUser.Name = user.Name;
@@ -85,28 +85,29 @@ namespace BL.Services
                 newUser.Password = user.Password;
                 newUser.UpdatedAt = DateTime.Now;
                 newUser.UpdatedBy = user.UpdatedBy;
-                _dataContext.SaveChanges();
+                await _dataContext.SaveChangesAsync();
             }
 
         }
-        public void RemoveUser(int id)
+        public async Task RemoveUserAsync(int id)
         {
-            var userToDelete = _dataContext.Users.FirstOrDefault(user => user.Id == id);
+            var userToDelete = await _dataContext.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (userToDelete != null)
             {
                 _dataContext.Users.Remove(userToDelete);
-                _dataContext.SaveChanges();
+                await _dataContext.SaveChangesAsync();
             }
 
         }
 
-        public void Login(string email, string password)
+        public async Task<User> LoginAsync(string email, string password)
         {
-            User user = _dataContext.Users.FirstOrDefault(u => u.Email == email && u.Password == password);
+            User user = await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
             if (user == null)
             {
                 throw new UnauthorizedAccessException("Invalid email or password");
             }
+            return user;
         }
     }
 }

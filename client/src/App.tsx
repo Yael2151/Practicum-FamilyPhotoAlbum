@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { UserProvider } from './components/context/UserProvider';
 import { router } from './components/router';
+import { Provider } from 'react-redux';
 
 const theme = createTheme({
   palette: {
@@ -21,13 +22,13 @@ const theme = createTheme({
 
 function App() {
   return (
-
-    <UserProvider >
-     <ThemeProvider theme={theme}>
-       <RouterProvider router={router} />
-     </ThemeProvider>
-    </UserProvider>
-    
+    // <Provider store={store}>
+      <UserProvider >
+        <ThemeProvider theme={theme}>
+          <RouterProvider router={router} />
+        </ThemeProvider>
+      </UserProvider>
+    // </Provider >
   )
 }
 

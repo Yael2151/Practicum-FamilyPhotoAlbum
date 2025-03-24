@@ -13,11 +13,10 @@ const Detailes = () => {
     return (<>
         <div >
             <Stack direction="row" spacing={2} sx={{ color: "#FF4081", position: "absolute", top: 0, left: 120, padding: '16px' }}>
-                <Avatar alt={state.firstName ? state.firstName.charAt(0).toUpperCase() : state.email?.charAt(0).toUpperCase()} src="/static/images/avatar/1.jpg" />
-                <div style={{ top: "1500" }}>{state.firstName} {state.lastName}</div>
+                <Avatar alt={state.name ? state.name.charAt(0).toUpperCase() : state.email?.charAt(0).toUpperCase()} src="/static/images/avatar/1.jpg" />
+                <div style={{ top: "1500" }}>{state.name}</div>
             </Stack>
         </div>
     </>)
 }
 export default Detailes
-

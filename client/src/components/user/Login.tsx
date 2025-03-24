@@ -28,18 +28,22 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
                 email: email,
                 password: password
             });
+            console.log("Response data:", res.data);
             dispatch({
                 type: 'LOGIN_USER',
                 data: res.data.user
             })
-            console.log(res.data);
+            console.log("hbnm");
+            console.log(res.data.message);
             if (res.data.message) {
                 alert('Login successful!');
                 onLoginSuccess()
                 setEmail('')
                 setPassword('')
             }
+            // onLoginSuccess()
         }
+        
         catch (error: any) {
             setError(error);
             setOpenErrors(true);

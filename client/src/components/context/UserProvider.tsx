@@ -8,12 +8,13 @@ interface UserContextProps {
 
 export const initialState: User = {
   id: 0,
-  firstName: "",
-  lastName: "",
+  // firstName: "",
+  // lastName: "",
+  name: "",
   email: "",
   password: "",
-  address: "",
-  phone: ""
+  // address: "",
+  // phone: ""
 };
 
 export const UsersContext = createContext<UserContextProps | undefined>(undefined);

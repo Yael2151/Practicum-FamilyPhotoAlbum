@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DL.Entities
 {
+    public enum ERole { Admin, User }
     public class User
     {
         public int Id { get; set; }
@@ -16,7 +17,9 @@ namespace DL.Entities
         public string CreatedBy { get; set; } = "system";
         public DateTime UpdatedAt { get; set; }
         public string UpdatedBy { get; set; } = "system";
-        
+        public ERole Role { get; set; }
+        public bool IsDeleted { get; set; }
+
 
         public User() { }
 

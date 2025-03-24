@@ -1,11 +1,12 @@
 export type User = {
     id?: number
-    firstName?: string
-    lastName?: string
+    // firstName?: string
+    // lastName?: string
+    name?: string
     email?: string
     password?: string
-    address?: string
-    phone?: string
+    // address?: string
+    // phone?: string
 }
 
 export type Action = {

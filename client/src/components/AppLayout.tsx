@@ -4,35 +4,42 @@ import Registration from "./user/Registration";
 import Update from "./user/Update";
 import Detailes from "./user/UserDetailes";
 import FileUploader from "./files/FileUploader";
+import ImageGallery from "./files/ShowImages";
 // import { SvgIcon, SvgIconProps } from "@mui/material";
 
 const AppLayout = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const handleLoginSuccess = () => {
-      setIsLoggedIn(true);
-    };
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const handleLoginSuccess = () => {
+    setIsLoggedIn(true);
+  };
+  return (
+    <>
+      {
+        isLoggedIn ?
+          (
+            <>
+              <Update />
+              <Detailes />
+              <FileUploader />
 
-    return (
-        <>
-         <Registration />
-           {
-            isLoggedIn ?
-              (
-                <>
-                  <Update />
-                  <Detailes />
-                </>
-              ) :
-              (
-                <>
-                  <Login onLoginSuccess={handleLoginSuccess} />
-                  <Registration />
-                </>
-              )
-          }
-          <FileUploader/>
-        </> 
-    );
+              <div style={{marginTop: "100px"}} >
+                <h1>גלריית תמונות</h1>
+                <ImageGallery />
+              </div>
+
+            </>
+          ) :
+          (
+            <>
+              <Login onLoginSuccess={handleLoginSuccess} />
+              <Registration />
+            </>
+
+          )
+      }
+
+    </>
+  );
 };
 
 export default AppLayout;
