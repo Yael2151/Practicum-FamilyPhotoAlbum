@@ -20,7 +20,7 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet("presigned-url")]
-        public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName, [FromQuery] int userId, [FromQuery] string caption)
+        public async Task<IActionResult> GetPresignedUrl([FromQuery] string fileName, [FromQuery] int userId, [FromQuery] string caption, [FromQuery] int challengeId)
         {
             var request = new GetPreSignedUrlRequest
             {
@@ -37,8 +37,8 @@ namespace WebAPI.Controllers
             var image = new Image
             {
                 UserId = userId,
-                //ChallengeId = challengeId,
-                ImageUrl = $"https://my-buckets-testpnoren.s3.amazonaws.com/{fileName}",
+                ChallengeId = challengeId,
+                ImageUrl = $"https://my-buckets-testpnoren.s3.us-east-1.amazonaws.com/{fileName}",
                 Caption = caption
             };
 

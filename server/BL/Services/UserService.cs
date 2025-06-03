@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -26,32 +27,34 @@ namespace BL.Services
             _configuration = configuration;
         }
 
-        //public string GenerateJwtToken(string username, string[] roles)
-        //{
-        //    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        //    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        public async Task<string> GenerateJwtTokenAsync(string username, string[] roles)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        //    var claims = new List<Claim>
-        //{
-        //    new Claim(ClaimTypes.Name, username)
-        //};
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username)
+            };
 
-        //    // הוספת תפקידים כ-Claims
-        //    foreach (var role in roles)
-        //    {
-        //        claims.Add(new Claim(ClaimTypes.Role, role));
-        //    }
+            // הוספת תפקידים כ-Claims
+            foreach (var role in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
 
-        //    var token = new JwtSecurityToken(
-        //        issuer: _configuration["Jwt:Issuer"],
-        //        audience: _configuration["Jwt:Audience"],
-        //        claims: claims,
-        //        expires: DateTime.Now.AddMinutes(30),
-        //        signingCredentials: credentials
-        //    );
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: credentials
+            );
 
-        //    return new JwtSecurityTokenHandler().WriteToken(token);
-        //}
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+
 
         public async Task<List<User>> GetAllUsersAsync()
         {
@@ -82,7 +85,8 @@ namespace BL.Services
             {
                 newUser.Name = user.Name;
                 newUser.Email = user.Email;
-                newUser.Password = user.Password;
+                //newUser.Password = user.Password;
+                newUser.Role = user.Role;
                 newUser.UpdatedAt = DateTime.Now;
                 newUser.UpdatedBy = user.UpdatedBy;
                 await _dataContext.SaveChangesAsync();

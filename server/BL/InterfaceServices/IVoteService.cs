@@ -10,8 +10,9 @@ namespace BL.InterfaceServices
 
     public interface IVoteService
     {
-        Task<bool> AddVoteAsync(int userId);
+        Task<bool> AddVoteAsync(int userId, int imageId);
         Task<int> GetVoteCountAsync(int imageId);
+        Task<Vote?> GetUserVoteAsync(int userId);
     }
     //interface IVoteService
     //{

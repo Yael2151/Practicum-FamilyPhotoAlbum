@@ -1,0 +1,192 @@
+<div class="challenges-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">Challenge Management</h1>
+      <p class="page-subtitle">Create and manage photo challenges</p>
+    </div>
+    <button mat-raised-button 
+            class="primary-button"
+            (click)="openCreateDialog()">
+      <mat-icon>add</mat-icon>
+      Create New Challenge
+    </button>
+  </div>
+
+  <!-- Active Challenge Section -->
+  <section class="active-challenge-section">
+    <h2 class="section-title">
+      <mat-icon>photo_camera</mat-icon>
+      Current Challenge
+    </h2>
+
+    <!-- Loading State -->
+    <div class="loading-container" *ngIf="isLoading">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>Loading challenge data...</p>
+    </div>
+
+    <!-- No Active Challenge -->
+    <mat-card class="no-challenge-card" *ngIf="!isLoading && !activeChallenge">
+      <mat-card-content class="no-challenge-content">
+        <mat-icon class="no-challenge-icon">photo_library</mat-icon>
+        <h3>No Active Challenge</h3>
+        <p>There is currently no active photo challenge. Create a new challenge to get started.</p>
+        <button mat-raised-button 
+                class="primary-button"
+                (click)="openCreateDialog()">
+          <mat-icon>add</mat-icon>
+          Create Challenge
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Active Challenge Card -->
+    <mat-card class="active-challenge-card" *ngIf="!isLoading && activeChallenge">
+      <div class="challenge-header">
+        <div class="challenge-info">
+          <h3 class="challenge-title">{{ activeChallenge.title }}</h3>
+          <span class="challenge-status" 
+                [style.background-color]="getStatusColor(activeChallenge)">
+            {{ getStatusText(activeChallenge) }}
+          </span>
+        </div>
+        <div class="challenge-actions">
+          <button mat-icon-button 
+                  class="edit-btn"
+                  (click)="openEditDialog(activeChallenge)"
+                  matTooltip="Edit challenge">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button 
+                  class="view-btn"
+                  (click)="openDetailsDialog(activeChallenge)"
+                  matTooltip="View details">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <mat-card-content class="challenge-content">
+        <div class="challenge-details">
+          <p class="challenge-description">{{ activeChallenge.description }}</p>
+          
+          <div class="challenge-meta">
+            <div class="meta-item">
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ activeChallenge.startDate | date:'MMM d, y' }} - {{ activeChallenge.endDate | date:'MMM d, y' }}</span>
+            </div>
+            <div class="meta-item">
+              <mat-icon>timer</mat-icon>
+              <span>{{ getRemainingDays(activeChallenge) }} days remaining</span>
+            </div>
+            <div class="meta-item">
+              <mat-icon>photo_library</mat-icon>
+              <span>{{ getSubmissionsCount(activeChallenge) }} submissions</span>
+            </div>
+          </div>
+          
+          <div class="challenge-progress">
+            <p class="progress-label">Challenge Progress</p>
+            <mat-progress-bar 
+              mode="determinate" 
+              [value]="(getRemainingDays(activeChallenge) / 7) * 100"
+              class="progress-bar">
+            </mat-progress-bar>
+          </div>
+        </div>
+        
+        <div class="challenge-action-panel">
+          <button mat-raised-button 
+                  class="view-submissions-btn"
+                  (click)="openDetailsDialog(activeChallenge)">
+            <mat-icon>collections</mat-icon>
+            View Submissions
+          </button>
+          <button mat-raised-button 
+                  class="select-winner-btn"
+                  [disabled]="hasWinner(activeChallenge)"
+                  (click)="openDetailsDialog(activeChallenge)">
+            <mat-icon>emoji_events</mat-icon>
+            {{ hasWinner(activeChallenge) ? 'Winner Selected' : 'Select Winner' }}
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <!-- Past Challenges Section -->
+  <section class="past-challenges-section">
+    <h2 class="section-title">
+      <mat-icon>history</mat-icon>
+      Past Challenges
+    </h2>
+
+    <!-- No Past Challenges -->
+    <div class="no-data-container" *ngIf="pastChallenges.length === 0">
+      <mat-icon class="no-data-icon">history_toggle_off</mat-icon>
+      <h3>No Past Challenges</h3>
+      <p>Previous challenges will appear here once they've ended.</p>
+    </div>
+
+    <!-- Past Challenges Grid -->
+    <div class="challenges-grid" *ngIf="pastChallenges.length > 0">
+      <mat-card class="challenge-card" *ngFor="let challenge of pastChallenges">
+        <div class="challenge-header">
+          <div class="challenge-info">
+            <h3 class="challenge-title">{{ challenge.title }}</h3>
+            <span class="challenge-status" 
+                  [style.background-color]="getStatusColor(challenge)">
+              {{ getStatusText(challenge) }}
+            </span>
+          </div>
+          <div class="challenge-actions">
+            <button mat-icon-button 
+                    class="view-btn"
+                    (click)="openDetailsDialog(challenge)"
+                    matTooltip="View details">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button 
+                    class="delete-btn"
+                    (click)="openDeleteDialog(challenge)"
+                    matTooltip="Delete challenge">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <mat-card-content class="challenge-content">
+          <p class="challenge-description">{{ challenge.description | slice:0:100 }}{{ challenge.description.length > 100 ? '...' : '' }}</p>
+          
+          <div class="challenge-meta">
+            <div class="meta-item">
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ challenge.startDate | date:'MMM d, y' }} - {{ challenge.endDate | date:'MMM d, y' }}</span>
+            </div>
+            <div class="meta-item">
+              <mat-icon>photo_library</mat-icon>
+              <span>{{ getSubmissionsCount(challenge) }} submissions</span>
+            </div>
+          </div>
+          
+          <div class="challenge-winner" *ngIf="hasWinner(challenge)">
+            <div class="winner-badge">
+              <mat-icon>emoji_events</mat-icon>
+              <span>Winner Selected</span>
+            </div>
+          </div>
+          
+          <div class="challenge-action-panel">
+            <button mat-raised-button 
+                    class="view-details-btn"
+                    (click)="openDetailsDialog(challenge)">
+              <mat-icon>visibility</mat-icon>
+              View Details
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+</div>

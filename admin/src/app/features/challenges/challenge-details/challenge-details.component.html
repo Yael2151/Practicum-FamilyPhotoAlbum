@@ -1,0 +1,134 @@
+<div class="challenge-details-container">
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-content">
+      <h2 class="dialog-title">{{ data.challenge.title }}</h2>
+      <span class="challenge-status">{{ getStatusText() }}</span>
+    </div>
+    <button mat-icon-button 
+            (click)="onClose()"
+            class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="dialog-content">
+    <mat-tab-group [(selectedIndex)]="selectedTab" class="details-tabs">
+      
+      <!-- Challenge Info Tab -->
+      <mat-tab label="Challenge Info">
+        <div class="tab-content">
+          <div class="challenge-info">
+            <h3>Description</h3>
+            <p class="description">{{ data.challenge.description }}</p>
+            
+            <div class="info-grid">
+              <div class="info-item">
+                <mat-icon>calendar_today</mat-icon>
+                <div>
+                  <span class="label">Start Date</span>
+                  <span class="value">{{ data.challenge.startDate | date:'MMM d, y' }}</span>
+                </div>
+              </div>
+              
+              <div class="info-item">
+                <mat-icon>event</mat-icon>
+                <div>
+                  <span class="label">End Date</span>
+                  <span class="value">{{ data.challenge.endDate | date:'MMM d, y' }}</span>
+                </div>
+              </div>
+              
+              <div class="info-item">
+                <mat-icon>photo_library</mat-icon>
+                <div>
+                  <span class="label">Submissions</span>
+                  <span class="value">{{ images.length }}</span>
+                </div>
+              </div>
+              
+              <div class="info-item" *ngIf="hasWinner()">
+                <mat-icon>emoji_events</mat-icon>
+                <div>
+                  <span class="label">Winner</span>
+                  <span class="value">Selected</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Submissions Tab -->
+      <mat-tab label="Submissions ({{ images.length }})">
+        <div class="tab-content">
+          
+          <!-- Loading State -->
+          <div class="loading-container" *ngIf="isLoading">
+            <mat-spinner diameter="50"></mat-spinner>
+            <p>Loading submissions...</p>
+          </div>
+
+          <!-- No Submissions -->
+          <div class="no-data-container" *ngIf="!isLoading && images.length === 0">
+            <mat-icon class="no-data-icon">photo_library</mat-icon>
+            <h3>No Submissions Yet</h3>
+            <p>Participants haven't submitted any photos for this challenge yet.</p>
+          </div>
+
+          <!-- Submissions Grid -->
+          <div class="submissions-grid" *ngIf="!isLoading && images.length > 0">
+            <div class="submission-card" 
+                 *ngFor="let image of images"
+                 [class.winner]="isWinner(image)">
+              
+              <div class="image-container">
+                <img [src]="image.imageUrl" 
+                     [alt]="image.title"
+                     class="submission-image">
+                
+                <div class="winner-overlay" *ngIf="isWinner(image)">
+                  <mat-icon>emoji_events</mat-icon>
+                  <span>Winner</span>
+                </div>
+                
+                <div class="image-actions" *ngIf="!hasWinner() && getStatusText() === 'Ended'">
+                  <button mat-mini-fab 
+                          color="primary"
+                          (click)="selectWinner(image)"
+                          matTooltip="Select as winner">
+                    <mat-icon>emoji_events</mat-icon>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="submission-info">
+                <h4 class="submission-title">{{ image.title }}</h4>
+                <p class="submission-description" *ngIf="image.description">
+                  {{ image.description }}
+                </p>
+                
+                <div class="submission-meta">
+                  <div class="meta-item">
+                    <mat-icon>person</mat-icon>
+                    <span>{{ image.user?.name || 'Unknown User' }}</span>
+                  </div>
+                  <div class="meta-item">
+                    <mat-icon>how_to_vote</mat-icon>
+                    <span>{{ image.votesCount }} votes</span>
+                  </div>
+                  <div class="meta-item">
+                    <mat-icon>schedule</mat-icon>
+                    <span>{{ image.createdAt | date:'MMM d' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+
+    </mat-tab-group>
+  </div>
+</div>

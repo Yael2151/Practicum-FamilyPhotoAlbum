@@ -1,0 +1,107 @@
+<div class="dialog-container">
+  <div class="dialog-header">
+    <h2 mat-dialog-title class="dialog-title">
+      <mat-icon class="title-icon">{{ data.mode === 'create' ? 'add_photo_alternate' : 'edit' }}</mat-icon>
+      {{ dialogTitle }}
+    </h2>
+    <button mat-icon-button 
+            mat-dialog-close
+            class="close-btn">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <mat-dialog-content class="dialog-content">
+    <form [formGroup]="challengeForm" class="challenge-form">
+      
+      <!-- Title Field -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Challenge Title</mat-label>
+        <input matInput 
+               formControlName="title"
+               placeholder="Enter a catchy title for the challenge">
+        <mat-icon matSuffix>title</mat-icon>
+        <mat-error *ngIf="challengeForm.get('title')?.invalid && challengeForm.get('title')?.touched">
+          {{ getErrorMessage('title') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Description Field -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Challenge Description</mat-label>
+        <textarea matInput 
+                  formControlName="description"
+                  placeholder="Describe the challenge and its rules"
+                  rows="4"></textarea>
+        <mat-icon matSuffix>description</mat-icon>
+        <mat-error *ngIf="challengeForm.get('description')?.invalid && challengeForm.get('description')?.touched">
+          {{ getErrorMessage('description') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Date Range -->
+      <div class="date-range">
+        <!-- Start Date -->
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>Start Date</mat-label>
+          <input matInput 
+                 [matDatepicker]="startPicker"
+                 formControlName="startDate"
+                 [min]="minStartDate">
+          <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+          <mat-datepicker #startPicker></mat-datepicker>
+          <mat-error *ngIf="challengeForm.get('startDate')?.invalid && challengeForm.get('startDate')?.touched">
+            {{ getErrorMessage('startDate') }}
+          </mat-error>
+        </mat-form-field>
+
+        <!-- End Date -->
+        <mat-form-field appearance="outline" class="date-field">
+          <mat-label>End Date</mat-label>
+          <input matInput 
+                 [matDatepicker]="endPicker"
+                 formControlName="endDate"
+                 [min]="minEndDate">
+          <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+          <mat-datepicker #endPicker></mat-datepicker>
+          <mat-error *ngIf="challengeForm.get('endDate')?.invalid && challengeForm.get('endDate')?.touched">
+            {{ getErrorMessage('endDate') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Challenge Tips -->
+      <div class="tips-section">
+        <h3 class="tips-title">
+          <mat-icon>lightbulb</mat-icon>
+          Tips for a Great Challenge
+        </h3>
+        <ul class="tips-list">
+          <li>Be specific about what kind of photos you're looking for</li>
+          <li>Set a reasonable timeframe (1-2 weeks is recommended)</li>
+          <li>Provide clear judging criteria in the description</li>
+          <li>Consider adding example images for inspiration</li>
+        </ul>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="dialog-actions">
+    <button mat-button 
+            type="button"
+            (click)="onCancel()"
+            class="cancel-btn">
+      Cancel
+    </button>
+    <button mat-raised-button 
+            type="submit"
+            (click)="onSubmit()"
+            [disabled]="challengeForm.invalid || isLoading"
+            class="submit-btn">
+      <mat-spinner *ngIf="isLoading" diameter="20" class="spinner"></mat-spinner>
+      <mat-icon *ngIf="!isLoading">{{ data.mode === 'create' ? 'add' : 'save' }}</mat-icon>
+      <span>{{ isLoading ? 'Processing...' : submitButtonText }}</span>
+    </button>
+  </mat-dialog-actions>
+</div>

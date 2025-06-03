@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DL.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250322205710_phtoRace")]
-    partial class phtoRace
+    [Migration("20250430233902_photoRace")]
+    partial class photoRace
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,53 @@ namespace DL.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("DL.Entities.Challenge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<int?>("OwnerOfTheWinningImgId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OwnerOfTheWinningImgId1")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<int?>("WinningImgId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("WinningImgId1")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerOfTheWinningImgId");
+
+                    b.HasIndex("OwnerOfTheWinningImgId1");
+
+                    b.HasIndex("WinningImgId");
+
+                    b.HasIndex("WinningImgId1");
+
+                    b.ToTable("Challenges");
+                });
 
             modelBuilder.Entity("DL.Entities.Image", b =>
                 {
@@ -37,6 +84,9 @@ namespace DL.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int>("ChallengeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -45,6 +95,8 @@ namespace DL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ChallengeId");
 
                     b.HasIndex("UserId");
 
@@ -119,20 +171,53 @@ namespace DL.Migrations
                     b.ToTable("Votes");
                 });
 
+            modelBuilder.Entity("DL.Entities.Challenge", b =>
+                {
+                    b.HasOne("DL.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("OwnerOfTheWinningImgId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("DL.Entities.User", "OwnerOfTheWinningImg")
+                        .WithMany()
+                        .HasForeignKey("OwnerOfTheWinningImgId1");
+
+                    b.HasOne("DL.Entities.Image", null)
+                        .WithMany()
+                        .HasForeignKey("WinningImgId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("DL.Entities.Image", "WinningImg")
+                        .WithMany()
+                        .HasForeignKey("WinningImgId1");
+
+                    b.Navigation("OwnerOfTheWinningImg");
+
+                    b.Navigation("WinningImg");
+                });
+
             modelBuilder.Entity("DL.Entities.Image", b =>
                 {
+                    b.HasOne("DL.Entities.Challenge", "Challenge")
+                        .WithMany("Images")
+                        .HasForeignKey("ChallengeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("DL.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Challenge");
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("DL.Entities.Vote", b =>
                 {
-                    b.HasOne("DL.Entities.Image", "Images")
+                    b.HasOne("DL.Entities.Image", "Image")
                         .WithMany("Votes")
                         .HasForeignKey("ImageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -141,12 +226,17 @@ namespace DL.Migrations
                     b.HasOne("DL.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Images");
+                    b.Navigation("Image");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DL.Entities.Challenge", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("DL.Entities.Image", b =>

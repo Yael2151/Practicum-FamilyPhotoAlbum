@@ -11,7 +11,7 @@ namespace BL.InterfaceServices
     {
         //public List<Image> GetImagesByChallengeId(int id);
         //public void AddImage(Image image);
-        Task<List<Image>> GetImagesByChallengeIdAsync();
+        Task<List<Image>> GetImagesByChallengeIdAsync(int id);
         Task AddImageAsync(Image image);
     }
 }

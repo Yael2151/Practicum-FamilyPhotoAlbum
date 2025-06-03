@@ -1,0 +1,258 @@
+<div class="settings-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">System Settings</h1>
+      <p class="page-subtitle">Configure platform settings and preferences</p>
+    </div>
+    <button mat-raised-button 
+            class="primary-button"
+            (click)="onResetToDefaults()">
+      <mat-icon>restore</mat-icon>
+      Reset to Defaults
+    </button>
+  </div>
+
+  <!-- Settings Tabs -->
+  <mat-tab-group class="settings-tabs">
+    
+    <!-- General Settings -->
+    <mat-tab label="General">
+      <div class="tab-content">
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>settings</mat-icon>
+              General Configuration
+            </mat-card-title>
+            <mat-card-subtitle>Basic platform settings and configurations</mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <form [formGroup]="generalForm" class="settings-form">
+              
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Site Name</mat-label>
+                <input matInput formControlName="siteName">
+                <mat-icon matSuffix>title</mat-icon>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Site Description</mat-label>
+                <textarea matInput 
+                          formControlName="siteDescription"
+                          rows="3"></textarea>
+                <mat-icon matSuffix>description</mat-icon>
+              </mat-form-field>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Max File Size (MB)</mat-label>
+                  <input matInput 
+                         type="number"
+                         formControlName="maxFileSize">
+                  <mat-icon matSuffix>storage</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Default Challenge Duration (days)</mat-label>
+                  <input matInput 
+                         type="number"
+                         formControlName="challengeDuration">
+                  <mat-icon matSuffix>schedule</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="allowed-formats">
+                <h4>Allowed File Formats</h4>
+                <mat-chip-listbox formControlName="allowedFormats">
+                  <mat-chip-option value="jpg">JPG</mat-chip-option>
+                  <mat-chip-option value="jpeg">JPEG</mat-chip-option>
+                  <mat-chip-option value="png">PNG</mat-chip-option>
+                  <!-- <mat-chip-option value="webp">WebP</mat-chip-option> -->
+                </mat-chip-listbox>
+              </div>
+
+            </form>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-raised-button 
+                    color="primary"
+                    (click)="onSaveGeneral()"
+                    [disabled]="generalForm.invalid || isLoading">
+              <mat-icon>save</mat-icon>
+              Save General Settings
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Email Settings -->
+    <mat-tab label="Email">
+      <div class="tab-content">
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>email</mat-icon>
+              Email Configuration
+            </mat-card-title>
+            <mat-card-subtitle>SMTP settings for sending notifications</mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <form [formGroup]="emailForm" class="settings-form">
+              
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>SMTP Host</mat-label>
+                  <input matInput formControlName="smtpHost">
+                  <mat-icon matSuffix>dns</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>SMTP Port</mat-label>
+                  <input matInput 
+                         type="number"
+                         formControlName="smtpPort">
+                  <mat-icon matSuffix>router</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>SMTP Username</mat-label>
+                  <input matInput 
+                         type="email"
+                         formControlName="smtpUsername">
+                  <mat-icon matSuffix>person</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>SMTP Password</mat-label>
+                  <input matInput 
+                         type="password"
+                         formControlName="smtpPassword">
+                  <mat-icon matSuffix>lock</mat-icon>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>From Email</mat-label>
+                  <input matInput 
+                         type="email"
+                         formControlName="fromEmail">
+                  <mat-icon matSuffix>send</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>From Name</mat-label>
+                  <input matInput formControlName="fromName">
+                  <mat-icon matSuffix>badge</mat-icon>
+                </mat-form-field>
+              </div>
+
+            </form>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-button 
+                    (click)="onTestEmail()">
+              <mat-icon>send</mat-icon>
+              Test Email
+            </button>
+            <button mat-raised-button 
+                    color="primary"
+                    (click)="onSaveEmail()"
+                    [disabled]="emailForm.invalid || isLoading">
+              <mat-icon>save</mat-icon>
+              Save Email Settings
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+    <!-- Security Settings -->
+    <mat-tab label="Security">
+      <div class="tab-content">
+        <mat-card class="settings-card">
+          <mat-card-header>
+            <mat-card-title>
+              <mat-icon>security</mat-icon>
+              Security & Privacy
+            </mat-card-title>
+            <mat-card-subtitle>Security settings and user permissions</mat-card-subtitle>
+          </mat-card-header>
+          
+          <mat-card-content>
+            <form [formGroup]="securityForm" class="settings-form">
+              
+              <div class="toggle-section">
+                <mat-slide-toggle formControlName="requireEmailVerification">
+                  <span class="toggle-label">
+                    <mat-icon>verified_user</mat-icon>
+                    Require Email Verification
+                  </span>
+                </mat-slide-toggle>
+                <p class="toggle-description">Users must verify their email before participating</p>
+              </div>
+
+              <div class="toggle-section">
+                <mat-slide-toggle formControlName="allowGuestVoting">
+                  <span class="toggle-label">
+                    <mat-icon>how_to_vote</mat-icon>
+                    Allow Guest Voting
+                  </span>
+                </mat-slide-toggle>
+                <p class="toggle-description">Allow non-registered users to vote on submissions</p>
+              </div>
+
+              <div class="toggle-section">
+                <mat-slide-toggle formControlName="enableRateLimiting">
+                  <span class="toggle-label">
+                    <mat-icon>speed</mat-icon>
+                    Enable Rate Limiting
+                  </span>
+                </mat-slide-toggle>
+                <p class="toggle-description">Limit the number of requests per user to prevent abuse</p>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Max Votes Per User</mat-label>
+                  <input matInput 
+                         type="number"
+                         formControlName="maxVotesPerUser">
+                  <mat-icon matSuffix>how_to_vote</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Session Timeout (minutes)</mat-label>
+                  <input matInput 
+                         type="number"
+                         formControlName="sessionTimeout">
+                  <mat-icon matSuffix>timer</mat-icon>
+                </mat-form-field>
+              </div>
+
+            </form>
+          </mat-card-content>
+          
+          <mat-card-actions>
+            <button mat-raised-button 
+                    color="primary"
+                    (click)="onSaveSecurity()"
+                    [disabled]="securityForm.invalid || isLoading">
+              <mat-icon>save</mat-icon>
+              Save Security Settings
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>

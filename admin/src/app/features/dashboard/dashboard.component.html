@@ -1,0 +1,132 @@
+<div class="dashboard-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">דשבורד ראשי</h1>
+    <p class="page-subtitle">סקירה כללית של פעילות המערכת</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <mat-card class="stat-card" *ngFor="let stat of statsCards">
+      <div class="stat-content">
+        <div class="stat-icon" [style.background-color]="stat.color">
+          <mat-icon>{{ stat.icon }}</mat-icon>
+        </div>
+        <div class="stat-details">
+          <h3 class="stat-value">{{ stat.value }}</h3>
+          <p class="stat-title">{{ stat.title }}</p>
+          <div class="stat-change" [class]="stat.changeType">
+            <mat-icon class="change-icon">
+              {{ stat.changeType === 'positive' ? 'trending_up' : 'trending_down' }}
+            </mat-icon>
+            <span>{{ stat.change }}</span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    
+    <!-- Recent Activities -->
+    <mat-card class="activity-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>history</mat-icon>
+          פעילות אחרונה
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-list">
+          <div class="activity-item" *ngFor="let activity of recentActivities">
+            <div class="activity-icon" [style.background-color]="activity.color">
+              <mat-icon>{{ activity.icon }}</mat-icon>
+            </div>
+            <div class="activity-details">
+              <p class="activity-message">{{ activity.message }}</p>
+              <div class="activity-meta">
+                <span class="activity-user">{{ activity.user }}</span>
+                <span class="activity-time">{{ activity.time }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="activity-footer">
+          <button mat-button color="primary">
+            צפה בכל הפעילות
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Top Challenges -->
+    <mat-card class="challenges-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>photo_camera</mat-icon>
+          תחרויות מובילות
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="challenges-list">
+          <div class="challenge-item" *ngFor="let challenge of topChallenges">
+            <div class="challenge-header">
+              <h4 class="challenge-title">{{ challenge.title }}</h4>
+              <span class="challenge-status" 
+                    [style.background-color]="getStatusColor(challenge.status)">
+                {{ getStatusText(challenge.status) }}
+              </span>
+            </div>
+            <div class="challenge-stats">
+              <div class="stat-item">
+                <mat-icon>image</mat-icon>
+                <span>{{ challenge.submissions }} תמונות</span>
+              </div>
+              <div class="stat-item">
+                <mat-icon>how_to_vote</mat-icon>
+                <span>{{ challenge.votes }} הצבעות</span>
+              </div>
+            </div>
+            <div class="challenge-date">
+              <mat-icon>schedule</mat-icon>
+              <span>עד {{ challenge.endDate | date:'dd/MM/yyyy' }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="challenges-footer">
+          <button mat-button color="primary">
+            ניהול תחרויות
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <h2 class="section-title">פעולות מהירות</h2>
+    <div class="actions-grid">
+      <button mat-raised-button class="action-btn primary">
+        <mat-icon>add</mat-icon>
+        <span>תחרות חדשה</span>
+      </button>
+      <button mat-raised-button class="action-btn secondary">
+        <mat-icon>people</mat-icon>
+        <span>ניהול משתמשים</span>
+      </button>
+      <button mat-raised-button class="action-btn accent">
+        <mat-icon>analytics</mat-icon>
+        <span>דוחות</span>
+      </button>
+      <button mat-raised-button class="action-btn warn">
+        <mat-icon>settings</mat-icon>
+        <span>הגדרות</span>
+      </button>
+    </div>
+  </div>
+
+</div>

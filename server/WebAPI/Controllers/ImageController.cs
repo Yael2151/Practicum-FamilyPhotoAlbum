@@ -1,5 +1,4 @@
 ﻿using BL.InterfaceServices;
-using BL.Services;
 using DL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +17,9 @@ namespace WebAPI.Controllers
 
         //[HttpGet("{id}")]
         [HttpGet]
-        public async Task<ActionResult<List<Image>>> GetImagesByChallengeId()
+        public async Task<ActionResult<List<Image>>> GetImagesByChallengeId([FromQuery] int id)
         {
-            var images = await _imageService.GetImagesByChallengeIdAsync();
+            var images = await _imageService.GetImagesByChallengeIdAsync(id);
             return Ok(images);
         }
 

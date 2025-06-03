@@ -16,9 +16,9 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost("add")]
-        public async Task<IActionResult> AddVote(int userId)
+        public async Task<IActionResult> AddVote(int userId, int imageId)
         {
-            bool success = await _voteService.AddVoteAsync(userId);
+            bool success = await _voteService.AddVoteAsync(userId, imageId);
             if (!success)
                 return BadRequest("User has already voted for this image.");
 
@@ -30,6 +30,17 @@ namespace WebAPI.Controllers
         {
             int count = await _voteService.GetVoteCountAsync(imageId);
             return Ok(count);
+        }
+
+        [HttpGet("user/{userId}")]
+        public async Task<IActionResult> GetUserVote(int userId)
+        {
+            var vote = await _voteService.GetUserVoteAsync(userId);
+            if (vote == null)
+            {
+                return NotFound();
+            }
+            return Ok(vote);
         }
     }
 }

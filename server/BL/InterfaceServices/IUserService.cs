@@ -9,6 +9,7 @@ namespace BL.InterfaceServices
 {
     public interface IUserService
     {
+        Task <string> GenerateJwtTokenAsync(string username, string[] roles);
         Task<List<User>> GetAllUsersAsync();
         Task<User> GetUserByIdAsync(int id);
         Task AddUserAsync(User user);

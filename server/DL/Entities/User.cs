@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DL.Entities
 {
-    public enum ERole { Admin, User }
+    public enum ERole { User, Admin}
     public class User
     {
         public int Id { get; set; }
@@ -23,9 +23,8 @@ namespace DL.Entities
 
         public User() { }
 
-        public User(int id, string name, string email, string password, string createdBy)
+        public User(string name, string email, string password, string createdBy)
         {
-            Id = id;
             Name = name;
             Email = email;
             Password = password;
