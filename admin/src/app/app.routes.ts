@@ -25,8 +25,7 @@ export const routes: Routes = [
       { path: 'settings', component: SettingsComponent }
       // נוסיף עוד routes בהמשך
     ]
-  }
-  // נוסיף עוד routes בהמשך
+  },
 ];
 
 @NgModule({
@@ -34,3 +33,4 @@ export const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
+
