@@ -9,8 +9,15 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Text;
 using System.Text.Json.Serialization;
+using DotNetEnv;
+
 
 var builder = WebApplication.CreateBuilder(args);
+
+// טען משתני סביבה מהקובץ .env
+Env.Load();
+builder.Configuration.AddEnvironmentVariables();
+
 
 //Add services to the container.
 //הוספת JWT Authentication
@@ -29,7 +36,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
+        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
     };
 });
 
@@ -57,11 +65,18 @@ builder.Services.AddScoped<IChallengeService, ChallengeService>();
 builder.Services.AddScoped<IDataContext, DataContext>();
 
 
+//builder.Services.AddDbContext<DataContext>(options =>
+//    options.UseMySql(
+//        builder.Configuration.GetConnectionString("DefaultConnection"),
+//        new MySqlServerVersion(new Version(8, 0, 0))
+//    ));
+
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
+        builder.Configuration["CONNECTION_STRING"],
         new MySqlServerVersion(new Version(8, 0, 0))
     ));
+
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
