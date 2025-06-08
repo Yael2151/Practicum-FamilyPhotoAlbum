@@ -10,12 +10,13 @@ using System;
 using System.Text;
 using System.Text.Json.Serialization;
 using DotNetEnv;
+using Microsoft.OpenApi.Models;
 
+Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
 
 // טען משתני סביבה מהקובץ .env
-Env.Load();
 builder.Configuration.AddEnvironmentVariables();
 
 
@@ -38,8 +39,13 @@ builder.Services.AddAuthentication(options =>
         ValidAudience = builder.Configuration["Jwt:Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT_KEY"]))
         //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_KEY")))
+
     };
 });
+
+
+
 
 //הוספת הרשאות מבוססות-תפקידים
 builder.Services.AddAuthorization(options =>
@@ -49,15 +55,14 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ViewerOnly", policy => policy.RequireRole("Viewer"));
 });
 
-
 //builder.Services.AddControllers();
-
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     options.JsonSerializerOptions.WriteIndented = true;
 });
 
+// =========== add services ==========
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IImageService, ImageService>();
 builder.Services.AddScoped<IVoteService, VoteService>();
@@ -71,24 +76,32 @@ builder.Services.AddScoped<IDataContext, DataContext>();
 //        new MySqlServerVersion(new Version(8, 0, 0))
 //    ));
 
+//builder.Services.AddDbContext<DataContext>(options =>
+//    options.UseMySql(
+//        Environment.GetEnvironmentVariable("CONNECTION_STRING"),
+//        new MySqlServerVersion(new Version(8, 0, 0))
+//    ));
+
 builder.Services.AddDbContext<DataContext>(options =>
     options.UseMySql(
         builder.Configuration["CONNECTION_STRING"],
         new MySqlServerVersion(new Version(8, 0, 0))
     ));
 
-
-
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAWSService<IAmazonS3>();
 
-builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
-{
-    policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-}));
 
+//builder.Services.AddCors(opt => opt.AddPolicy("MyPolicy", policy =>
+//{
+//    policy.AllowAnyOrigin()
+//          .AllowAnyHeader()
+//          .AllowAnyMethod();
+//}));
+
+//cors
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -104,8 +117,6 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -125,4 +136,3 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
-

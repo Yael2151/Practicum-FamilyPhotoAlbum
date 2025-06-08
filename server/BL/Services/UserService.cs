@@ -21,15 +21,18 @@ namespace BL.Services
         private readonly IConfiguration _configuration;
         private readonly IDataContext _dataContext;
 
-        public UserService(IDataContext dataContext, IConfiguration configuration)
+        public UserService(IDataContext dataContex, IConfiguration configuration)
         {
-            _dataContext = dataContext;
+            _dataContext = dataContex;
             _configuration = configuration;
         }
 
         public async Task<string> GenerateJwtTokenAsync(string username, string[] roles)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+            //var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
