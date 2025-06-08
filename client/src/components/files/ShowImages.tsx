@@ -24,13 +24,13 @@
 //     const fetchImagesForCurrentChallenge = async () => {
 //       try {
 //         console.log("Fetching images for current challenge...");
-//         const challengeRes = await axios.get('https://localhost:7263/api/challenge/last');
+//         const challengeRes = await axiosInstance.get('https://localhost:7263/api/challenge/last');
 //         const challengeId = challengeRes.data.id;
 //         console.log(challengeId);
 //         console.log("challenge response:", challengeRes.data);
 
   
-//         const imageRes = await axios.get(`https://localhost:7263/api/Image?id=${challengeId}`);
+//         const imageRes = await axiosInstance.get(`https://localhost:7263/api/Image?id=${challengeId}`);
 //         console.log("imageRes.data:", imageRes.data);
 //         console.log("typeof:", typeof imageRes.data);
 
@@ -52,7 +52,7 @@
   
 //     // const fetchImages = async () => {
 //     //   try {
-//     //     const response = await axios.get('https://localhost:7263/api/Image');
+//     //     const response = await axiosInstance.get('https://localhost:7263/api/Image');
 //     //     const formattedImages = response.data.map((img: { id: number; imageUrl: string; fileName: string; votes: number }) => ({
 //     //       id: img.id,
 //     //       fileName: img.fileName, 
@@ -70,7 +70,7 @@
 
 //     const fetchUserVote = async () => {
 //       try {
-//         const response = await axios.get(`https://localhost:7263/api/Vote/user/${userId}`);
+//         const response = await axiosInstance.get(`https://localhost:7263/api/Vote/user/${userId}`);
 //         if (response.data) {
 //           setSelectedImageId(response.data.imageId);
 //         }
@@ -91,7 +91,7 @@
 //     if (selectedImageId === imageId) return; // אם כבר נבחרה התמונה, לא עושים כלום
 
 //     try {
-//       await axios.post(`https://localhost:7263/api/Vote/add?userId=${userId}&imageId=${imageId}`);
+//       await axiosInstance.post(`https://localhost:7263/api/Vote/add?userId=${userId}&imageId=${imageId}`);
 //       console.log(userId);
 //       console.log(imageId);
       
@@ -163,8 +163,8 @@ import {
 } from "@mui/material"
 import { ThumbUp, Add, Close, CloudUpload } from "@mui/icons-material"
 import { UsersContext } from "../context/UserProvider"
-import axios from "axios"
 import FileUploader from "./FileUploader"
+import axiosInstance from "../axiosInstance"
 
 interface Image {
   id: number
@@ -202,12 +202,12 @@ const ImageGallery = () => {
     const fetchData = async () => {
       try {
         // Fetch current challenge
-        const challengeRes = await axios.get("https://localhost:7263/api/challenge/last")
+        const challengeRes = await axiosInstance.get("/challenge/last")
         setCurrentChallenge(challengeRes.data)
         const challengeId = challengeRes.data.id
 
         // Fetch images for current challenge
-        const imageRes = await axios.get(`https://localhost:7263/api/Image?id=${challengeId}`)
+        const imageRes = await axiosInstance.get(`/Image?id=${challengeId}`)
         const formattedImages = imageRes.data.map((img: any) => ({
           id: img.id,
           fileName: img.caption || "No caption",
@@ -218,7 +218,7 @@ const ImageGallery = () => {
 
         // Fetch user's vote
         try {
-          const voteRes = await axios.get(`https://localhost:7263/api/Vote/user/${userId}`)
+          const voteRes = await axiosInstance.get(`/Vote/user/${userId}`)
           if (voteRes.data) {
             setSelectedImageId(voteRes.data.imageId)
           }
@@ -262,7 +262,7 @@ const ImageGallery = () => {
       setSelectedImageId(imageId)
 
       // Send vote to server
-      await axios.post(`https://localhost:7263/api/Vote/add?userId=${userId}&imageId=${imageId}`)
+      await axiosInstance.post(`/Vote/add?userId=${userId}&imageId=${imageId}`)
 
       setSuccessMessage("Your vote has been recorded!")
       setOpenSuccess(true)
@@ -290,7 +290,7 @@ const ImageGallery = () => {
     // Refresh the image gallery
     try {
       const challengeId = currentChallenge?.id
-      const imageRes = await axios.get(`https://localhost:7263/api/Image?id=${challengeId}`)
+      const imageRes = await axiosInstance.get(`/Image?id=${challengeId}`)
       const formattedImages = imageRes.data.map((img: any) => ({
         id: img.id,
         fileName: img.caption || "No caption",
@@ -652,7 +652,7 @@ export default ImageGallery
 //     const fetchImages = async () => {
 //       try {
 //         console.log("response");
-//         const response = await axios.get('https://localhost:7263/api/Image');
+//         const response = await axiosInstance.get('https://localhost:7263/api/Image');
 //         console.log(response);
         
 //         setImages(response.data); // מחזיר מערך של URL-ים לתמונות
@@ -713,7 +713,7 @@ export default ImageGallery
 //     const fetchImages = async () => {
 //       try {
 //         console.log("Fetching images...");
-//         const response = await axios.get('https://localhost:7263/api/Image');
+//         const response = await axiosInstance.get('https://localhost:7263/api/Image');
 //         console.log("Response:", response.data);
 
 //         // שמירת כתובות ה-URL בלבד
@@ -777,7 +777,7 @@ export default ImageGallery
 //     const fetchImages = async () => {
 //       try {
 //         console.log("Fetching images...");
-//         const response = await axios.get('https://localhost:7263/api/Image');
+//         const response = await axiosInstance.get('https://localhost:7263/api/Image');
 //         console.log("Response:", response.data);
 
 //         // שמירת הנתונים בפורמט המתאים
@@ -857,7 +857,7 @@ export default ImageGallery
 //   useEffect(() => {
 //     const fetchImages = async () => {
 //       try {
-//         const response = await axios.get('https://localhost:7263/api/Image');
+//         const response = await axiosInstance.get('https://localhost:7263/api/Image');
 //         const formattedImages = response.data.map((img: { id: number; imageUrl: string; fileName: string; votes: number }) => ({
 //           id: img.id,
 //           fileName: img.fileName, 
@@ -874,7 +874,7 @@ export default ImageGallery
 
 //     const fetchUserVote = async () => {
 //       try {
-//         const response = await axios.get(`https://localhost:7263/api/Vote/user/${userId}`);
+//         const response = await axiosInstance.get(`https://localhost:7263/api/Vote/user/${userId}`);
 //         if (response.data) {
 //           setSelectedImageId(response.data.imageId);
 //         }
@@ -891,7 +891,7 @@ export default ImageGallery
 //     if (selectedImageId === imageId) return; // אם כבר נבחרה התמונה, לא עושים כלום
 
 //     try {
-//       await axios.post(`https://localhost:7263/api/Vote/add?userId=${userId}&imageId=${imageId}`);
+//       await axiosInstance.post(`https://localhost:7263/api/Vote/add?userId=${userId}&imageId=${imageId}`);
 //       setSelectedImageId(imageId);
 //       setUploadedFiles(prevFiles =>
 //         prevFiles.map(file => ({

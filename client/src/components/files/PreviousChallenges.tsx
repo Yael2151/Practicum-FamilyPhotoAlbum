@@ -24,7 +24,7 @@
 //     const fetchPastChallenges = async () => {
 //       try {
 //         console.log('PreviousChallenges loaded')
-//         const res = await axios.get('https://localhost:7263/api/challenge/past');
+//         const res = await axiosInstance.get('https://localhost:7263/api/challenge/past');
 //         setChallenges(res.data);
 //       } catch (err) {
 //         setError('שגיאה בטעינת האתגרים הקודמים');
@@ -81,7 +81,7 @@ import {
   Fade,
 } from "@mui/material"
 import { EmojiEvents, CalendarToday } from "@mui/icons-material"
-import axios from "axios"
+import axiosInstance from "../axiosInstance"
 
 interface Challenge {
   id: number
@@ -105,7 +105,7 @@ const PreviousChallenges = () => {
     const fetchPastChallenges = async () => {
       try {
         console.log("PreviousChallenges loaded")
-        const res = await axios.get("https://localhost:7263/api/challenge/past")
+        const res = await axiosInstance.get("/challenge/past")
         setChallenges(res.data)
       } catch (err) {
         setError("Error loading previous challenges")

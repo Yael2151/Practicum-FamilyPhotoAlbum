@@ -33,7 +33,7 @@
 
 //     try {
 //       // שלב 1: קבלת Presigned URL מהשרת
-//       const response = await axios.get('https://localhost:7263/api/upload/presigned-url', {
+//       const response = await axiosInstance.get('https://localhost:7263/api/upload/presigned-url', {
 //         params: {
 //           fileName: file.name,
 //           userId,
@@ -46,7 +46,7 @@
 //       console.log("PreSigned URL:", presignedUrl);
 
 //       // שלב 2: העלאת הקובץ ישירות ל-S3
-//       await axios.put(presignedUrl, file, {
+//       await axiosInstance.put(presignedUrl, file, {
 //         onUploadProgress: (progressEvent) => {
 //           const percent = Math.round(
 //             (progressEvent.loaded * 100) / (progressEvent.total || 1)
@@ -125,7 +125,7 @@
 
 //     try {
 //       // שלב 1: קבלת Presigned URL מהשרת
-//       const response = await axios.get('https://localhost:7263/api/upload/presigned-url', {
+//       const response = await axiosInstance.get('https://localhost:7263/api/upload/presigned-url', {
 //         params: {
 //           fileName: file.name,
 //           userId,
@@ -138,7 +138,7 @@
 //       console.log("PreSigned URL:", presignedUrl);
 
 //       // שלב 2: העלאת הקובץ ישירות ל-S3
-//       await axios.put(presignedUrl, file, {
+//       await axiosInstance.put(presignedUrl, file, {
 //         onUploadProgress: (progressEvent) => {
 //           const percent = Math.round(
 //             (progressEvent.loaded * 100) / (progressEvent.total || 1)
@@ -276,7 +276,7 @@
 //   useEffect(() => {
 //     const fetchCurrentChallenge = async () => {
 //       try {
-//         const res = await axios.get('https://localhost:7263/api/challenge/last');
+//         const res = await axiosInstance.get('https://localhost:7263/api/challenge/last');
 //         setChallengeId(res.data.id);
 //       } catch (err) {
 //         console.error('שגיאה בקבלת אתגר נוכחי', err);
@@ -298,7 +298,7 @@
 //     }
 
 //     try {
-//       const response = await axios.get('https://localhost:7263/api/upload/presigned-url', {
+//       const response = await axiosInstance.get('https://localhost:7263/api/upload/presigned-url', {
 //         params: {
 //           fileName: file.name,
 //           userId,
@@ -309,7 +309,7 @@
 
 //       const presignedUrl = response.data.url;
 
-//       await axios.put(presignedUrl, file, {
+//       await axiosInstance.put(presignedUrl, file, {
 //         onUploadProgress: (progressEvent) => {
 //           const percent = Math.round((progressEvent.loaded * 100) / (progressEvent.total || 1));
 //           setProgress(percent);
@@ -363,8 +363,7 @@ import {
 } from "@mui/material"
 import { CloudUpload, Close, Image } from "@mui/icons-material"
 import { UsersContext } from "../context/UserProvider"
-import axios from "axios"
-
+import axiosInstance from "../axiosInstance"
 interface FileUploaderProps {
   onUploadSuccess?: () => void
 }
@@ -388,7 +387,7 @@ const FileUploader = ({ onUploadSuccess }: FileUploaderProps) => {
   useEffect(() => {
     const fetchCurrentChallenge = async () => {
       try {
-        const res = await axios.get("https://localhost:7263/api/challenge/last")
+        const res = await axiosInstance.get("/challenge/last")
         setChallengeId(res.data.id)
       } catch (err) {
         console.error("Error fetching current challenge", err)
@@ -437,7 +436,7 @@ const FileUploader = ({ onUploadSuccess }: FileUploaderProps) => {
     setError(null)
 
     try {
-      const response = await axios.get("https://localhost:7263/api/upload/presigned-url", {
+      const response = await axiosInstance.get("https://localhost:7263/api/upload/presigned-url", {
         params: {
           fileName: file.name,
           userId,
@@ -448,7 +447,7 @@ const FileUploader = ({ onUploadSuccess }: FileUploaderProps) => {
 
       const presignedUrl = response.data.url
 
-      await axios.put(presignedUrl, file, {
+      await axiosInstance.put(presignedUrl, file, {
         headers: {
           "Content-Type": file.type,
         },

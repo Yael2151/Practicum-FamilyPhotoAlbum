@@ -26,7 +26,6 @@ import {
 } from "@mui/material"
 import { useNavigate } from "react-router-dom"
 import { PhotoCamera, History, EmojiEvents, ArrowForward } from "@mui/icons-material"
-import axios from "axios"
 
 interface Challenge {
   id: number
@@ -44,7 +43,7 @@ const Home = () => {
   useEffect(() => {
     const fetchCurrentChallenge = async () => {
       try {
-        const res = await axios.get("https://localhost:7263/api/challenge/last")
+        const res = await axiosInstance.get("/challenge/last")
         setCurrentChallenge(res.data)
       } catch (err) {
         console.error("Error fetching current challenge", err)
@@ -531,5 +530,6 @@ const Home = () => {
 }
 
 import { ThumbUp } from "@mui/icons-material"
+import axiosInstance from "./axiosInstance"
 
 export default Home

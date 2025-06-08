@@ -40,7 +40,7 @@
 //     //     e.preventDefault();
 //     //     handleClose();
 //     //     try {
-//     //         const res = await axios.post('https://localhost:7263/api/User', formData);
+//     //         const res = await axiosInstance.post('https://localhost:7263/api/User', formData);
 //     //         if (res.data.message) {
 //     //             dispatch({
 //     //                 type: 'Add_USER',
@@ -69,7 +69,7 @@
 //         console.log("📤 Sending request to API with data:", formData);
 
 //         try {
-//             const res = await axios.post('https://localhost:7263/api/User', formData);
+//             const res = await axiosInstance.post('https://localhost:7263/api/User', formData);
 //             console.log("✅ Response received:", res.data);
 
 //             if (res.data.message) {
@@ -159,7 +159,7 @@
 //         setLoading(true)
 
 //         try {
-//             const res = await axios.post("https://localhost:7263/api/User", formData)
+//             const res = await axiosInstance.post("https://localhost:7263/api/User", formData)
 
 //             if (res.data.message) {
 //                 dispatch({ type: "Add_USER", data: res.data.user })
@@ -231,10 +231,10 @@ import type React from "react"
 import { Button, Fade, Modal, Snackbar, Alert } from "@mui/material"
 import { type FormEvent, useContext, useState } from "react"
 import { UsersContext } from "../context/UserProvider"
-import axios from "axios"
 import Form from "./Form"
 import HandlingErrors from "../HandlingErrors"
 import { PersonAdd } from "@mui/icons-material"
+import axiosInstance from "../axiosInstance"
 
 const Registration = () => {
   const [open, setOpen] = useState(false)
@@ -279,7 +279,7 @@ const Registration = () => {
     try {
       // Check if email already exists
       try {
-        const checkEmail = await axios.get(`https://localhost:7263/api/User/check-email?email=${formData.email}`)
+        const checkEmail = await axiosInstance.get(`/User/check-email?email=${formData.email}`)
         if (checkEmail.data && checkEmail.data.exists) {
           setError({ response: { status: 400, data: { message: "Email already exists" } } })
           setOpenErrors(true)
@@ -291,7 +291,7 @@ const Registration = () => {
         console.log("Email check endpoint not available, continuing with registration")
       }
 
-      const res = await axios.post("https://localhost:7263/api/User", formData)
+      const res = await axiosInstance.post("/User", formData)
 
       if (res.data.message) {
         dispatch({ type: "Add_USER", data: res.data.user })
@@ -304,7 +304,6 @@ const Registration = () => {
             password: formData.password,
           }),
         )
-
         // Show success message
         setSuccessMessage("Registration successful! Logging you in...")
         alert("Registration successful! Logging you in...")

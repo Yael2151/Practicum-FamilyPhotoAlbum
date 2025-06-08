@@ -27,7 +27,7 @@
 //         e.preventDefault();
 //         handleClose();
 //         try {
-//             const res = await axios.post('https://localhost:7263/api/User/login', {
+//             const res = await axiosInstance.post('https://localhost:7263/api/User/login', {
 //                 email: email,
 //                 password: password
 //             });
@@ -148,7 +148,7 @@
 //     setLoading(true)
 
 //     try {
-//       const res = await axios.post("https://localhost:7263/api/User/login", {
+//       const res = await axiosInstance.post("https://localhost:7263/api/User/login", {
 //         email: email,
 //         password: password,
 //       })
@@ -296,10 +296,10 @@
 import { Box, Button, TextField, InputAdornment, IconButton, CircularProgress, Fade, Modal, Snackbar, Alert,} from "@mui/material"
 import { type FormEvent, useContext, useState, useEffect } from "react"
 import { UsersContext } from "../context/UserProvider"
-import axios from "axios"
 import HandlingErrors from "../HandlingErrors"
 import { Visibility, VisibilityOff, Email, Lock, Login as LoginIcon } from "@mui/icons-material"
 import AuthCard from "./AuthCard"
+import axiosInstance from "../axiosInstance"
 
 const Login = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
   const [open, setOpen] = useState(false)
@@ -350,7 +350,7 @@ const Login = ({ onLoginSuccess }: { onLoginSuccess: () => void }) => {
     setLoading(true)
 
     try {
-      const res = await axios.post("https://localhost:7263/api/User/login", {
+      const res = await axiosInstance.post("/User/login", {
         email: email,
         password: password,
       })
@@ -536,7 +536,7 @@ export default Login
 //         setIsLoading(true);
         
 //         try {
-//             const res = await axios.post('https://localhost:7263/api/User/login', {
+//             const res = await axiosInstance.post('https://localhost:7263/api/User/login', {
 //                 email: email,
 //                 password: password
 //             });

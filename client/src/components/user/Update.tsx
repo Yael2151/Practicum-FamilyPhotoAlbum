@@ -39,7 +39,7 @@
 //         e.preventDefault();
 //         handleClose();
 //         try {
-//             const res = await axios.put('https://localhost:7263/api/User', formData, {
+//             const res = await axiosInstance.put('https://localhost:7263/api/User', formData, {
 //                 headers: {
 //                     'user-id': state.id,
 //                     'Content-Type': 'application/json'
@@ -130,7 +130,7 @@
 //     setLoading(true)
 
 //     try {
-//       const res = await axios.put("https://localhost:7263/api/User", formData, {
+//       const res = await axiosInstance.put("https://localhost:7263/api/User", formData, {
 //         headers: {
 //           "user-id": state.id,
 //           "Content-Type": "application/json",
@@ -282,7 +282,7 @@
 //         // Check if email already exists and is not the user's current email
 //         if (formData.email !== state.email) {
 //             try {
-//             const checkEmail = await axios.get(`https://localhost:7263/api/User/check-email?email=${formData.email}`)
+//             const checkEmail = await axiosInstance.get(`https://localhost:7263/api/User/check-email?email=${formData.email}`)
 //             if (checkEmail.data && checkEmail.data.exists) {
 //                 setError({ response: { status: 400, data: { message: "Email already exists" } } })
 //                 setOpenErrors(true)
@@ -295,7 +295,7 @@
 //             }
 //         }
 
-//         const res = await axios.put("https://localhost:7263/api/User", formData, {
+//         const res = await axiosInstance.put("https://localhost:7263/api/User", formData, {
 //             headers: {
 //             "user-id": state.id,
 //             "Content-Type": "application/json",
@@ -469,8 +469,8 @@ import {
 import { Edit, Person, Email } from "@mui/icons-material"
 import { type FormEvent, useContext, useState } from "react"
 import { UsersContext } from "../context/UserProvider"
-import axios from "axios"
 import HandlingErrors from "../HandlingErrors"
+import axiosInstance from "../axiosInstance"
 
 interface UpdateProps {
   onClose?: () => void
@@ -543,7 +543,7 @@ const Update = ({ onClose, isMenuItem = false }: UpdateProps) => {
       // Check if email already exists and is not the user's current email
       if (formData.email !== state.email) {
         try {
-          const checkEmail = await axios.get(`https://localhost:7263/api/User/check-email?email=${formData.email}`)
+          const checkEmail = await axiosInstance.get(`/User/check-email?email=${formData.email}`)
           if (checkEmail.data && checkEmail.data.exists) {
             setError({ response: { status: 400, data: { message: "Email already exists" } } })
             setOpenErrors(true)
@@ -556,7 +556,7 @@ const Update = ({ onClose, isMenuItem = false }: UpdateProps) => {
         }
       }
 
-      const res = await axios.put("https://localhost:7263/api/User", formData, {
+      const res = await axiosInstance.put("/User", formData, {
         headers: {
           "user-id": state.id,
           "Content-Type": "application/json",
