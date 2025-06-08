@@ -102,6 +102,9 @@ builder.Services.AddAWSService<IAmazonS3>();
 //}));
 
 //cors
+
+var allowedClient = "https://pixup-2bew.onrender.com";
+var allowedAdmin = "https://pixup-admin.onrender.com";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin",
@@ -110,7 +113,7 @@ builder.Services.AddCors(options =>
             //policy.WithOrigins("http://localhost:5173")
             //      .AllowAnyHeader()
             //      .AllowAnyMethod();
-            policy.WithOrigins("http://localhost:5173", "http://localhost:4200")
+            policy.WithOrigins("http://localhost:5173", "http://localhost:4200", allowedClient, allowedAdmin)
                   .AllowAnyHeader()
                   .AllowAnyMethod();
         });
